@@ -17,8 +17,8 @@ class AlcorSDK {
         this.signer = new ethers.Wallet(privateKey, this.provider);
     }
 
-    private async fetch(url: string, options: RequestInit) {
-        const response = await fetch(`${process.env.API_URL}${url}?chain=${this.chain}`, {
+    private async fetch(url: string, options: RequestInit, args?: string) {
+        const response = await fetch(`${process.env.API_URL}${url}?chain=${this.chain}&${args}`, {
             ...options,
             headers: {
                 'Content-Type': 'application/json'
@@ -53,16 +53,25 @@ class AlcorSDK {
         return receipts;
     }
 
-    public async getOptions(): Promise<Option[]> {
-        return this.fetch('/options', {
-            method: 'GET'
-        });
+    public async getExpirations(): Promise<number[]> {
+        const result = await this.fetch('/expirations', { method: 'GET' });
+        return result.expirations;
     }
 
-    public async getPools(): Promise<Option[]> {
-        return this.fetch('/pools', {
-            method: 'GET'
-        });
+    public async getOptions(expiration?: number): Promise<Option[]> {
+        return this.fetch(
+            '/options',
+            { method: 'GET' },
+            expiration ? `expiration=${expiration}` : ''
+        );
+    }
+
+    public async getPools(expiration?: number): Promise<Option[]> {
+        return this.fetch(
+            '/pools',
+            { method: 'GET' },
+            expiration ? `expiration=${expiration}` : ''
+        );
     }
 
     public async tradeOption(params: TradeOptionParams): Promise<TransactionReceipt[]> {
