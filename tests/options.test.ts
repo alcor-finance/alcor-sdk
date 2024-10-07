@@ -47,4 +47,19 @@ describe('AlcorSDK', () => {
 
         expect(result).toBeDefined();
     }, 20000);
+
+    test('buy combo option', async () => {
+        const result = await sdk.tradeComboOption({
+            paymentToken: 'weth',
+            expiration: 1728593240,
+            optionType: 'call',
+            strikePrice1: 2850,
+            strikePrice2: 2950,
+            action: 'buy',
+            contractsAmount: 0.001,
+            price: 8.359
+        });
+
+        expect(result).toBeDefined();
+    }, 20000);
 });

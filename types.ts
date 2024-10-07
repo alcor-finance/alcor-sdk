@@ -26,6 +26,15 @@ export type TradeOptionParams = Pick<Option, 'expiration' | 'optionType' | 'stri
     price: number;
 };
 
+export type TradeComboOptionParams = Pick<Option, 'expiration' | 'optionType'> & {
+    paymentToken: string;
+    action: 'buy' | 'sell';
+    contractsAmount: number;
+    price: number;
+    strikePrice1: number;
+    strikePrice2: number;
+};
+
 export type ProvideLiquidityParams = {
     minPrice: number;
     maxPrice: number;

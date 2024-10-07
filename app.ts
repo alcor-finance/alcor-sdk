@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { Provider, Signer, TransactionReceipt, TransactionRequest, ethers } from 'ethers';
-import { Option, ProvideLiquidityParams, TradeOptionParams } from './types';
+import { Option, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
 
 class AlcorSDK {
     private chain: string;
@@ -34,6 +34,25 @@ class AlcorSDK {
         return result;
     }
 
+    private async executeCalls(calls: TransactionRequest[]): Promise<TransactionReceipt[]> {
+        const address = await this.signer.getAddress();
+        const receipts: TransactionReceipt[] = [];
+        for (const call of calls) {
+            const staticCall = await this.provider.call({ ...call, from: address });
+            if (staticCall) {
+                const tx = await this.signer.sendTransaction(call);
+                const receipt = await tx.wait();
+                if (receipt) {
+                    receipts.push(receipt);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return receipts;
+    }
+
     public async getOptions(): Promise<Option[]> {
         return this.fetch('/options', {
             method: 'GET'
@@ -52,22 +71,21 @@ class AlcorSDK {
             method: 'POST',
             body: JSON.stringify({ ...params, address })
         });
+
         const calls = result.calls as TransactionRequest[];
+        const receipts = await this.executeCalls(calls);
+        return receipts;
+    }
 
-        const receipts: TransactionReceipt[] = [];
-        for (const call of calls) {
-            const staticCall = await this.provider.call({ ...call, from: address });
-            if (staticCall) {
-                const tx = await this.signer.sendTransaction(call);
-                const receipt = await tx.wait();
-                if (receipt) {
-                    receipts.push(receipt);
-                } else {
-                    break;
-                }
-            }
-        }
+    public async tradeComboOption(params: TradeComboOptionParams): Promise<TransactionReceipt[]> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch('/trade-combo-option', {
+            method: 'POST',
+            body: JSON.stringify({ ...params, address })
+        });
 
+        const calls = result.calls as TransactionRequest[];
+        const receipts = await this.executeCalls(calls);
         return receipts;
     }
 
