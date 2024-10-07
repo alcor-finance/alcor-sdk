@@ -40,6 +40,12 @@ class AlcorSDK {
         });
     }
 
+    public async getPools(): Promise<Option[]> {
+        return this.fetch('/pools', {
+            method: 'GET'
+        });
+    }
+
     public async tradeOption(params: TradeOptionParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/trade-option', {
