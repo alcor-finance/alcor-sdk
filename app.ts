@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { Provider, Signer, TransactionReceipt, TransactionRequest, ethers } from 'ethers';
-import { Option, TradeOptionParams } from './types';
+import { Option, ProvideLiquidityParams, TradeOptionParams } from './types';
 
 class AlcorSDK {
     private chain: string;
@@ -40,7 +40,7 @@ class AlcorSDK {
         });
     }
 
-    public async tradeOption(params: TradeOptionParams): Promise<TransactionRequest[]> {
+    public async tradeOption(params: TradeOptionParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/trade-option', {
             method: 'POST',
@@ -48,21 +48,36 @@ class AlcorSDK {
         });
         const calls = result.calls as TransactionRequest[];
 
-        const txs: TransactionReceipt[] = [];
+        const receipts: TransactionReceipt[] = [];
         for (const call of calls) {
             const staticCall = await this.provider.call({ ...call, from: address });
             if (staticCall) {
                 const tx = await this.signer.sendTransaction(call);
                 const receipt = await tx.wait();
                 if (receipt) {
-                    txs.push(receipt);
+                    receipts.push(receipt);
                 } else {
                     break;
                 }
             }
         }
 
-        return txs;
+        return receipts;
+    }
+
+    public async provideLiquidity(params: ProvideLiquidityParams): Promise<TransactionReceipt | null> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch('/provide-liquidity', {
+            method: 'POST',
+            body: JSON.stringify({ ...params, address })
+        });
+        const call = result.call as TransactionRequest;
+
+        const staticCall = await this.provider.call({ ...call, from: address });
+        const tx = await this.signer.sendTransaction(call);
+        const receipt = await tx.wait();
+
+        return receipt;
     }
 }
 

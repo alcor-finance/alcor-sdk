@@ -21,3 +21,15 @@ export type TradeOptionParams = Pick<Option, 'optionExpiration' | 'optionType' |
     contractsAmount: number;
     price: number;
 };
+
+export type ProvideLiquidityParams = {
+    minPrice: number;
+    maxPrice: number;
+    amount: number;
+    option: {
+        price: number;
+        expiry: number;
+        strike: number;
+        isCall: boolean;
+    };
+};

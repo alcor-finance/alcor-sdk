@@ -31,4 +31,20 @@ describe('AlcorSDK', () => {
 
         expect(result).toBeDefined();
     }, 20000);
+
+    test('provide liquidity', async () => {
+        const result = await sdk.provideLiquidity({
+            minPrice: 90.24,
+            maxPrice: 99.74,
+            amount: 0.001,
+            option: {
+                price: 94.98,
+                expiry: 1728593240,
+                strike: 2950,
+                isCall: true
+            }
+        });
+
+        expect(result).toBeDefined();
+    }, 20000);
 });
