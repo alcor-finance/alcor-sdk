@@ -1,10 +1,15 @@
-export type Option = {
-    id: number;
-    optionType: 'call' | 'put';
+type OptionType = 'call' | 'put';
+
+export type Pool = {
+    optionType: OptionType;
+    expiration: number;
     strikePrice: number;
-    humanReadableExpiration: string;
-    optionExpiration: number;
     TVL: number;
+    optionPrice: number;
+};
+
+export type Option = Pool & {
+    breakEven: number;
     leverage: number;
     buyPrice: number;
     sellPrice: number;
@@ -12,10 +17,9 @@ export type Option = {
     impliedVol: number;
     delta: number;
     vega: number;
-    optionPrice: number;
 };
 
-export type TradeOptionParams = Pick<Option, 'optionExpiration' | 'optionType' | 'strikePrice'> & {
+export type TradeOptionParams = Pick<Option, 'expiration' | 'optionType' | 'strikePrice'> & {
     paymentToken: string;
     action: 'buy' | 'sell';
     contractsAmount: number;
@@ -26,10 +30,5 @@ export type ProvideLiquidityParams = {
     minPrice: number;
     maxPrice: number;
     amount: number;
-    option: {
-        price: number;
-        expiry: number;
-        strike: number;
-        isCall: boolean;
-    };
+    option: Pick<Option, 'optionType' | 'expiration' | 'strikePrice' | 'optionPrice'>;
 };

@@ -21,7 +21,7 @@ describe('AlcorSDK', () => {
     test('buy option', async () => {
         const result = await sdk.tradeOption({
             paymentToken: 'weth',
-            optionExpiration: 1728593240,
+            expiration: 1728593240,
             optionType: 'call',
             strikePrice: 2850,
             action: 'buy',
@@ -38,10 +38,10 @@ describe('AlcorSDK', () => {
             maxPrice: 99.74,
             amount: 0.001,
             option: {
-                price: 94.98,
-                expiry: 1728593240,
-                strike: 2950,
-                isCall: true
+                optionPrice: 94.98,
+                expiration: 1728593240,
+                strikePrice: 2950,
+                optionType: 'call'
             }
         });
 
