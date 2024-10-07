@@ -59,19 +59,23 @@ class AlcorSDK {
     }
 
     public async getOptions(expiration?: number): Promise<Option[]> {
-        return this.fetch(
+        const result = await this.fetch(
             '/options',
             { method: 'GET' },
             expiration ? `expiration=${expiration}` : ''
         );
+
+        return result.options;
     }
 
     public async getPools(expiration?: number): Promise<Option[]> {
-        return this.fetch(
+        const result = await this.fetch(
             '/pools',
             { method: 'GET' },
             expiration ? `expiration=${expiration}` : ''
         );
+
+        return result.pools;
     }
 
     public async tradeOption(params: TradeOptionParams): Promise<TransactionReceipt[]> {
