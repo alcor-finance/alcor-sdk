@@ -53,8 +53,8 @@ describe('AlcorSDK', () => {
             paymentToken: 'weth',
             expiration: 1728593240,
             optionType: 'call',
-            strikePrice1: 2850,
-            strikePrice2: 2950,
+            strikePriceLow: 2850,
+            strikePriceHigh: 2950,
             action: 'buy',
             contractsAmount: 0.001,
             price: 8.359

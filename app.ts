@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { Provider, Signer, TransactionReceipt, TransactionRequest, ethers } from 'ethers';
-import { Option, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
+import { ComboPosition, Option, Position, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
 
 class AlcorSDK {
     private chain: string;
@@ -18,7 +18,7 @@ class AlcorSDK {
     }
 
     private async fetch(url: string, options: RequestInit, args?: string) {
-        const response = await fetch(`${process.env.API_URL}${url}?chain=${this.chain}&${args}`, {
+        const response = await fetch(`${process.env.API_URL}${url}?chain=${this.chain}${args}`, {
             ...options,
             headers: {
                 'Content-Type': 'application/json'
@@ -59,10 +59,11 @@ class AlcorSDK {
     }
 
     public async getOptions(expiration?: number): Promise<Option[]> {
+        const address = await this.signer.getAddress();
         const result = await this.fetch(
             '/options',
             { method: 'GET' },
-            expiration ? `expiration=${expiration}` : ''
+            `&address=${address}` + (expiration ? `&expiration=${expiration}` : '')
         );
 
         return result.options;
@@ -72,10 +73,32 @@ class AlcorSDK {
         const result = await this.fetch(
             '/pools',
             { method: 'GET' },
-            expiration ? `expiration=${expiration}` : ''
+            expiration ? `&expiration=${expiration}` : ''
         );
 
         return result.pools;
+    }
+
+    public async getOptionPositions(): Promise<Position[]> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch(
+            '/positions',
+            { method: 'GET' },
+            `&address=${address}`
+        );
+
+        return result.positions;
+    }
+
+    public async getComboPositions(): Promise<ComboPosition[]> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch(
+            '/combo-positions',
+            { method: 'GET' },
+            `&address=${address}`
+        );
+
+        return result.positions;
     }
 
     public async tradeOption(params: TradeOptionParams): Promise<TransactionReceipt[]> {

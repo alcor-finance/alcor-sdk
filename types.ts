@@ -17,6 +17,7 @@ export type Option = Pool & {
     impliedVol: number;
     delta: number;
     vega: number;
+    contracts: number;
 };
 
 export type TradeOptionParams = Pick<Option, 'expiration' | 'optionType' | 'strikePrice'> & {
@@ -31,8 +32,8 @@ export type TradeComboOptionParams = Pick<Option, 'expiration' | 'optionType'> &
     action: 'buy' | 'sell';
     contractsAmount: number;
     price: number;
-    strikePrice1: number;
-    strikePrice2: number;
+    strikePriceLow: number;
+    strikePriceHigh: number;
 };
 
 export type ProvideLiquidityParams = {
@@ -40,4 +41,18 @@ export type ProvideLiquidityParams = {
     maxPrice: number;
     amount: number;
     option: Pick<Option, 'optionType' | 'expiration' | 'strikePrice' | 'optionPrice'>;
+};
+
+export type Position = Pool & {
+    pnlValue: number;
+    markPrice: number;
+    contracts: number;
+    status: string;
+};
+
+export type ComboPosition = Omit<Position, 'strikePrice' | 'TVL' | 'optionPrice'> & {
+    strikePriceLow: number;
+    strikePriceHigh: number;
+    optionPriceLow: number;
+    optionPriceHigh: number;
 };
