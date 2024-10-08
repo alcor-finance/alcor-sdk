@@ -17,7 +17,7 @@ class AlcorSDK {
         this.signer = new ethers.Wallet(privateKey, this.provider);
     }
 
-    private async fetch(url: string, options: RequestInit, args?: string) {
+    private async fetch(url: string, options: RequestInit, args = '') {
         const response = await fetch(`${process.env.API_URL}${url}?chain=${this.chain}${args}`, {
             ...options,
             headers: {
