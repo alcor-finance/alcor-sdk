@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { Provider, Signer, TransactionReceipt, TransactionRequest, ethers } from 'ethers';
-import { ComboPosition, Option, Position, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
+import { ComboPosition, LpPosition, Option, Position, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
 
 class AlcorSDK {
     private chain: string;
@@ -94,6 +94,17 @@ class AlcorSDK {
         const address = await this.signer.getAddress();
         const result = await this.fetch(
             '/combo-positions',
+            { method: 'GET' },
+            `&address=${address}`
+        );
+
+        return result.positions;
+    }
+
+    public async getLpPositions(): Promise<LpPosition[]> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch(
+            '/lp-positions',
             { method: 'GET' },
             `&address=${address}`
         );

@@ -56,3 +56,16 @@ export type ComboPosition = Omit<Position, 'strikePrice' | 'TVL' | 'optionPrice'
     optionPriceLow: number;
     optionPriceHigh: number;
 };
+
+export type LpPosition = Pool & {
+    optionsBought: number;
+    premiumsPaid: number;
+    deposited: number;
+    unclaimedFees: number;
+    currentStrike: number;
+    currentExpiry: number;
+    minPrice: number;
+    maxPrice: number;
+    tickLower: number;
+    tickUpper: number;
+};
