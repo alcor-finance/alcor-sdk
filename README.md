@@ -1,6 +1,6 @@
 # Alcor SDK
 
-TypeScript SDK for interacting with Alcor options protocol.
+TypeScript SDK for interacting with Alcor on Arbitrum.
 
 ## Quick Start
 
@@ -10,7 +10,7 @@ import { AlcorSDK } from 'alcor-sdk';
 // Initialize the SDK
 const sdk = new AlcorSDK(
     'YOUR_PRIVATE_KEY',
-    'YOUR_RPC_URL' // e.g. https://mainnet.infura.io/v3/YOUR-PROJECT-ID
+    'YOUR_RPC_URL' // e.g. https://arb-mainnet.g.alchemy.com/v2/API_KEY
 );
 
 // Example: Get all available options
@@ -76,7 +76,6 @@ const position = await sdk.liquidity.getPosition();
 
 // Provide liquidity
 await sdk.liquidity.provide({
-    expiration: 1234567890,
     amount: 0.1 // 0.1 ETH
 });
 
