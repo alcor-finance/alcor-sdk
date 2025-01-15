@@ -1,9 +1,12 @@
 type OptionType = 'call' | 'put';
 
-export type Pool = {
+export type OptionPoolKey = {
     optionType: OptionType;
     expiration: number;
     strikePrice: number;
+};
+
+export type Pool = OptionPoolKey & {
     TVL: number;
     optionPrice: number;
 };
@@ -20,7 +23,7 @@ export type Option = Pool & {
     contracts: number;
 };
 
-export type TradeOptionParams = Pick<Option, 'expiration' | 'optionType' | 'strikePrice'> & {
+export type TradeOptionParams = OptionPoolKey & {
     paymentToken: string;
     action: 'buy' | 'sell';
     contractsAmount: number;
@@ -28,13 +31,13 @@ export type TradeOptionParams = Pick<Option, 'expiration' | 'optionType' | 'stri
 };
 
 export type BuyOptionParams = {
-    option: Pick<Option, 'expiration' | 'optionType' | 'strikePrice' | 'buyPrice'>;
+    option: OptionPoolKey & Pick<Option, 'buyPrice'>;
     contractsAmount: number;
     paymentToken?: string;
 };
 
 export type SellOptionParams = {
-    option: Pick<Option, 'expiration' | 'optionType' | 'strikePrice' | 'sellPrice'>;
+    option: OptionPoolKey & Pick<Option, 'sellPrice'>;
     contractsAmount: number;
     paymentToken?: string;
 };

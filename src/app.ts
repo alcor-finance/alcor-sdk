@@ -5,6 +5,7 @@ import {
     ComboPosition,
     LpPosition,
     Option,
+    OptionPoolKey,
     Position,
     ProvideLiquidityParams,
     SellOptionParams,
@@ -98,6 +99,17 @@ class AlcorSDK {
         );
 
         return result.positions;
+    }
+
+    public async getOptionPosition(option: OptionPoolKey): Promise<number> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch(
+            '/position',
+            { method: 'GET' },
+            `&address=${address}&expiration=${option.expiration}&strike=${option.strikePrice}&optionType=${option.optionType}`
+        );
+
+        return result.contracts;
     }
 
     public async getComboPositions(): Promise<ComboPosition[]> {

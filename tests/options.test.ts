@@ -28,16 +28,15 @@ describe('AlcorSDK', () => {
     });
 
     test('buy option', async () => {
-        const result = await sdk.tradeOption({
-            paymentToken: 'weth',
-            expiration: 1728593240,
-            optionType: 'call',
-            strikePrice: 2850,
-            action: 'buy',
-            contractsAmount: 0.0001,
-            price: 101.15
+        const option = await sdk.getOptions()[0];
+        const oldPosition = option.contracts;
+        const result = await sdk.buyOption({
+            option,
+            contractsAmount: 0.0001
         });
+        const updatedPosition = await sdk.getOptionPosition(option);
 
+        expect(updatedPosition).toBeGreaterThan(oldPosition);
         expect(result).toBeDefined();
     }, 20000);
 
