@@ -52,7 +52,7 @@ export class OptionsModule extends SdkModule {
         return result.contracts;
     }
 
-    public async tradeOption(params: TradeOptionParams): Promise<TransactionReceipt[]> {
+    public async trade(params: TradeOptionParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/trade-option', {
             method: 'POST',
@@ -64,9 +64,9 @@ export class OptionsModule extends SdkModule {
         return receipts;
     }
 
-    public async buyOption(params: BuyOptionParams): Promise<TransactionReceipt[]> {
+    public async buy(params: BuyOptionParams): Promise<TransactionReceipt[]> {
         const { option, contractsAmount, paymentToken } = params;
-        return this.tradeOption({
+        return this.trade({
             ...option,
             paymentToken: paymentToken ?? 'weth',
             action: 'buy',
@@ -75,9 +75,9 @@ export class OptionsModule extends SdkModule {
         });
     }
 
-    public async sellOption(params: SellOptionParams): Promise<TransactionReceipt[]> {
+    public async sell(params: SellOptionParams): Promise<TransactionReceipt[]> {
         const { option, contractsAmount, paymentToken } = params;
-        return this.tradeOption({
+        return this.trade({
             ...option,
             paymentToken: paymentToken ?? 'weth',
             action: 'sell',

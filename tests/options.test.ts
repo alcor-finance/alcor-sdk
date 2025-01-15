@@ -31,7 +31,7 @@ describe('AlcorSDK', () => {
         const options = await sdk.options.getOptions();
         const option = options[0];
         const oldPosition = option.contracts;
-        const result = await sdk.options.buyOption({
+        const result = await sdk.options.buy({
             option,
             contractsAmount: 0.0001
         });
