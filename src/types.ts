@@ -17,7 +17,7 @@ export type Option = Pool & {
     impliedVol: number;
     delta: number;
     vega: number;
-    contracts: number;
+    contracts?: number;
 };
 
 export type TradeOptionParams = Pick<Option, 'expiration' | 'optionType' | 'strikePrice'> & {

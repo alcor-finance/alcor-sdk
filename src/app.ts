@@ -3,17 +3,16 @@ import { Provider, Signer, TransactionReceipt, TransactionRequest, ethers } from
 import { ComboPosition, LpPosition, Option, Position, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
 
 class AlcorSDK {
-    private chain: string;
+    private chain: 'arbitrum';
     private signer: Signer;
     private provider: Provider;
 
-    constructor(privateKey: string, alchemyAPIKey: string, chain: string) {
-        this.chain = chain;
+    constructor(privateKey: string, alchemyAPIKey: string) {
+        this.chain = 'arbitrum';
         const rpcProvider = {
-            'sepolia': 'https://eth-sepolia.g.alchemy.com/v2/',
             'arbitrum': 'https://arb-mainnet.g.alchemy.com/v2/'
         };
-        this.provider = new ethers.JsonRpcProvider(rpcProvider[chain] + alchemyAPIKey);
+        this.provider = new ethers.JsonRpcProvider(rpcProvider[this.chain] + alchemyAPIKey);
         this.signer = new ethers.Wallet(privateKey, this.provider);
     }
 

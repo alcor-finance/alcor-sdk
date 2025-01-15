@@ -1,8 +1,12 @@
 {
   "name": "alcor-sdk",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/app.js",
+  "types": "dist/app.d.ts",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "tsc -w",
     "test": "jest --setupFiles dotenv/config"
   },
   "author": "",
