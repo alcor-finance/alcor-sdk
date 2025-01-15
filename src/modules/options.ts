@@ -10,8 +10,8 @@ import {
 import { SdkModule } from './sdk';
 
 export class OptionsModule extends SdkModule {
-    constructor(provider: Provider, signer: Signer, chain: string) {
-        super(provider, signer, chain);
+    constructor(provider: Provider, signer: Signer) {
+        super(provider, signer);
     }
 
     public async getAvailableExpirations(): Promise<number[]> {

@@ -3,16 +3,14 @@ import { Provider, Signer, TransactionReceipt, TransactionRequest } from 'ethers
 export abstract class SdkModule {
     protected provider: Provider;
     protected signer: Signer;
-    protected chain: string;
 
-    constructor(provider: Provider, signer: Signer, chain: string) {
+    constructor(provider: Provider, signer: Signer) {
         this.provider = provider;
         this.signer = signer;
-        this.chain = chain;
     }
 
     protected async fetch(url: string, options: RequestInit, args = '') {
-        const response = await fetch(`${process.env.API_URL}${url}?chain=${this.chain}${args}`, {
+        const response = await fetch(`${process.env.API_URL}${url}?${args}`, {
             ...options,
             headers: {
                 'Content-Type': 'application/json'

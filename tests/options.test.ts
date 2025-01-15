@@ -1,15 +1,15 @@
 import AlcorSDK from "../src/app";
 
-const { PRIVATE_KEY, ALCHEMY_API_KEY } = process.env;
+const { PRIVATE_KEY, RPC_URL } = process.env;
 
 describe('Options', () => {
     let sdk: AlcorSDK;
 
     beforeAll(() => {
-        if (!PRIVATE_KEY || !ALCHEMY_API_KEY) {
+        if (!PRIVATE_KEY || !RPC_URL) {
             throw new Error('Environment variables missing');
         }
-        sdk = new AlcorSDK(PRIVATE_KEY, ALCHEMY_API_KEY);
+        sdk = new AlcorSDK(PRIVATE_KEY, RPC_URL);
     });
 
     test('get options', async () => {

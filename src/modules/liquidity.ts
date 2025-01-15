@@ -3,8 +3,8 @@ import { LpPosition, ProvideLiquidityParams, Option } from '../types';
 import { SdkModule } from './sdk';
 
 export class LiquidityModule extends SdkModule {
-    constructor(provider: Provider, signer: Signer, chain: string) {
-        super(provider, signer, chain);
+    constructor(provider: Provider, signer: Signer) {
+        super(provider, signer);
     }
 
     public async getPools(expiration?: number): Promise<Option[]> {

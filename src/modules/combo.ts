@@ -3,8 +3,8 @@ import { ComboPosition, TradeComboOptionParams } from '../types';
 import { SdkModule } from './sdk';
 
 export class ComboModule extends SdkModule {
-    constructor(provider: Provider, signer: Signer, chain: string) {
-        super(provider, signer, chain);
+    constructor(provider: Provider, signer: Signer) {
+        super(provider, signer);
     }
 
     public async getPositions(): Promise<ComboPosition[]> {
