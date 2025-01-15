@@ -18,7 +18,7 @@ export class ComboModule extends SdkModule {
         return result.positions;
     }
 
-    public async tradeOption(params: TradeComboOptionParams): Promise<TransactionReceipt[]> {
+    public async trade(params: TradeComboOptionParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/trade-combo-option', {
             method: 'POST',
@@ -29,4 +29,4 @@ export class ComboModule extends SdkModule {
         const receipts = await this.executeCalls(calls);
         return receipts;
     }
-} 
+}

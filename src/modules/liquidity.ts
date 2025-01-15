@@ -28,18 +28,15 @@ export class LiquidityModule extends SdkModule {
         return result.positions;
     }
 
-    public async provideLiquidity(params: ProvideLiquidityParams): Promise<TransactionReceipt | null> {
+    public async provideLiquidity(params: ProvideLiquidityParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/provide-liquidity', {
             method: 'POST',
             body: JSON.stringify({ ...params, address })
         });
-        const call = result.call as TransactionRequest;
+        const calls = result.calls as TransactionRequest[];
+        const receipts = await this.executeCalls(calls);
 
-        const staticCall = await this.provider.call({ ...call, from: address });
-        const tx = await this.signer.sendTransaction(call);
-        const receipt = await tx.wait();
-
-        return receipt;
+        return receipts;
     }
 } 

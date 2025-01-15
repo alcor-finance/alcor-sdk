@@ -15,4 +15,3 @@ export type ComboPosition = Omit<Position, 'strikePrice' | 'TVL' | 'optionPrice'
     optionPriceLow: number;
     optionPriceHigh: number;
 };
-

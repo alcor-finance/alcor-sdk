@@ -1,10 +1,7 @@
-import { Pool, Option } from "./";
+import { Pool } from "./";
 
 export type ProvideLiquidityParams = {
-    minPrice: number;
-    maxPrice: number;
     amount: number;
-    option: Pick<Option, 'optionType' | 'expiration' | 'strikePrice' | 'optionPrice'>;
 };
 
 export type LpPosition = Pool & {
