@@ -1,0 +1,41 @@
+{
+    "entryPoints": [
+        "src/modules/combo.ts",
+        "src/modules/liquidity.ts",
+        "src/modules/options.ts",
+        "src/types/index.ts"
+    ],
+    "entryPointStrategy": "resolve",
+    "out": "docs",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true,
+    "includeVersion": false,
+    "theme": "default",
+    "hideGenerator": true,
+    "readme": "README.md",
+    "excludeInternal": true,
+    "disableSources": true,
+    "categorizeByGroup": false,
+    "cleanOutputDir": true,
+    "disableGit": true,
+    "treatWarningsAsErrors": false,
+    "basePath": "./src",
+    "visibilityFilters": {
+        "protected": false,
+        "private": false,
+        "inherited": false,
+        "external": false
+    },
+    "intentionallyNotExported": [
+        "SdkModule",
+        "Provider",
+        "Signer",
+        "TransactionReceipt",
+        "TransactionRequest"
+    ],
+    "navigation": {
+        "includeCategories": false,
+        "includeGroups": false
+    }
+} 

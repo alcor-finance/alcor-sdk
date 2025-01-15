@@ -1,90 +1,92 @@
-# AlcorSDK
+# Alcor SDK
 
-AlcorSDK is a TypeScript library for interacting with the Alcor options trading platform.
+TypeScript SDK for interacting with Alcor options protocol.
 
-## Usage
-
-```typescript
-import AlcorSDK from 'alcor-sdk';
-
-const sdk = new AlcorSDK(privateKey, alchemyAPIKey, chain);
-```
-
-Replace `privateKey`, `alchemyAPIKey`, and `chain` with your actual values.
-
-## Key Features
-
-### Fetch Data
+## Quick Start
 
 ```typescript
-// Get available expirations
-const expirations = await sdk.getExpirations();
+import { AlcorSDK } from 'alcor-sdk';
 
-// Get options (optionally filtered by expiration)
-const options = await sdk.getOptions(expiration);
+// Initialize the SDK
+const sdk = new AlcorSDK(
+    'YOUR_PRIVATE_KEY',
+    'YOUR_RPC_URL' // e.g. https://mainnet.infura.io/v3/YOUR-PROJECT-ID
+);
 
-// Get pools (optionally filtered by expiration)
-const pools = await sdk.getPools(expiration);
+// Example: Get all available options
+const options = await sdk.options.getOptions();
 
-// Get user positions
-const optionPositions = await sdk.getOptionPositions();
-const comboPositions = await sdk.getComboPositions();
-const lpPositions = await sdk.getLpPositions();
-```
-
-### Trade Options
-
-```typescript
-// Trade a single option
-const receipt = await sdk.tradeOption({
-  paymentToken: 'weth',
-  expiration: 1728593240,
-  optionType: 'call',
-  strikePrice: 2850,
-  action: 'buy',
-  contractsAmount: 0.0001,
-  price: 101.15
+// Example: Buy option
+await sdk.options.buy({
+    option: options[0],
+    contractsAmount: 0.1
 });
 
-// Trade a combo option
-const receipt = await sdk.tradeComboOption({
-  paymentToken: 'weth',
-  expiration: 1728593240,
-  optionType: 'call',
-  strikePriceLow: 2850,
-  strikePriceHigh: 2950,
-  action: 'buy',
-  contractsAmount: 0.001,
-  price: 8.359
+// Example: Sell option
+await sdk.options.sell({
+    option: {
+      expiration: 1234567890,
+      strikePrice: 3000,
+      optionType: 'call'
+    },
+    contractsAmount: 0.1,
+    paymentToken: 'weth'
 });
 ```
 
-### Provide Liquidity
+## Modules
+
+### Options
 
 ```typescript
-const receipt = await sdk.provideLiquidity({
-  minPrice: 90.24,
-  maxPrice: 99.74,
-  amount: 0.001,
-  option: {
-    optionPrice: 94.98,
-    expiration: 1728593240,
-    strikePrice: 2950,
-    optionType: 'call'
-  }
+// Get all available options
+const options = await sdk.options.getOptions();
+
+// Get options for specific expiration
+const options = await sdk.options.getOptions(1234567890);
+
+// Get your positions
+const positions = await sdk.options.getPositions();
+
+// Buy options
+await sdk.options.buy({
+    option: options[0],
+    contractsAmount: 1
+});
+
+// Sell options
+await sdk.options.sell({
+    option: {
+        expiration: 1735290000,
+        strikePrice: 3000,
+        optionType: 'call'
+    },
+    contractsAmount: 1
 });
 ```
 
-## Error Handling
-
-All methods may throw errors. It's recommended to use try-catch blocks when calling SDK methods.
+### Liquidity
 
 ```typescript
-try {
-  const options = await sdk.getOptions();
-} catch (error) {
-  console.error('Error fetching options:', error.message);
-}
+// Get available pools
+const pools = await sdk.liquidity.getPools();
+
+// Get your LP position
+const position = await sdk.liquidity.getPosition();
+
+// Provide liquidity
+await sdk.liquidity.provide({
+    expiration: 1234567890,
+    amount: 0.1 // 0.1 ETH
+});
+
+// Collect fees
+await sdk.liquidity.collectFees();
+
+// Remove provided liquidity
+await sdk.liquidity.remove();
 ```
 
-For more detailed information on types and parameters, refer to the `types.ts` file in the SDK.
+### Combo
+
+Coming soon
