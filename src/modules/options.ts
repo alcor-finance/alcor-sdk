@@ -33,7 +33,7 @@ export class OptionsModule extends SdkModule {
     public async getPositions(expiration?: number): Promise<Position[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch(
-            '/positions',
+            '/options/positions',
             { method: 'GET' },
             `&address=${address}` + (expiration ? `&expiration=${expiration}` : '')
         );
@@ -44,7 +44,7 @@ export class OptionsModule extends SdkModule {
     public async getPosition(option: OptionPoolKey): Promise<number> {
         const address = await this.signer.getAddress();
         const result = await this.fetch(
-            '/position',
+            '/options/position',
             { method: 'GET' },
             `&address=${address}&expiration=${option.expiration}&strike=${option.strikePrice}&optionType=${option.optionType}`
         );
@@ -54,7 +54,7 @@ export class OptionsModule extends SdkModule {
 
     public async trade(params: TradeOptionParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
-        const result = await this.fetch('/trade-option', {
+        const result = await this.fetch('/options/trade', {
             method: 'POST',
             body: JSON.stringify({ ...params, address })
         });

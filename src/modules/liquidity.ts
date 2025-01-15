@@ -20,7 +20,7 @@ export class LiquidityModule extends SdkModule {
     public async getPositions(): Promise<LpPosition[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch(
-            '/lp-positions',
+            '/liquidity/positions',
             { method: 'GET' },
             `&address=${address}`
         );
@@ -30,7 +30,7 @@ export class LiquidityModule extends SdkModule {
 
     public async provideLiquidity(params: ProvideLiquidityParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
-        const result = await this.fetch('/provide-liquidity', {
+        const result = await this.fetch('/liquidity/provide', {
             method: 'POST',
             body: JSON.stringify({ ...params, address })
         });
