@@ -2,11 +2,21 @@ import { Provider, Signer, TransactionReceipt, TransactionRequest } from 'ethers
 import { LpPosition, ProvideLiquidityParams, Option } from '../types';
 import { SdkModule } from './sdk';
 
+/**
+ * Module for managing liquidity provision operations in option pools.
+ * Handles providing liquidity, collecting fees, and managing LP positions.
+ */
 export class LiquidityModule extends SdkModule {
+    /** @internal */
     constructor(provider: Provider, signer: Signer) {
         super(provider, signer);
     }
 
+    /**
+     * Retrieves available liquidity pools.
+     * @param expiration - Optional timestamp to filter pools by expiration
+     * @returns Promise resolving to an array of option pools
+     */
     public async getPools(expiration?: number): Promise<Option[]> {
         const result = await this.fetch(
             '/pools',
@@ -17,6 +27,10 @@ export class LiquidityModule extends SdkModule {
         return result.pools;
     }
 
+    /**
+     * Retrieves the current LP position for the connected wallet address.
+     * @returns Promise resolving to the LP position or null if no position exists
+     */
     public async getPosition(): Promise<LpPosition | null> {
         try {
             const address = await this.signer.getAddress();
@@ -32,6 +46,11 @@ export class LiquidityModule extends SdkModule {
         }
     }
 
+    /**
+     * Provides liquidity to an option pool.
+     * @param params - Parameters for providing liquidity
+     * @returns Promise resolving to an array of transaction receipts
+     */
     public async provide(params: ProvideLiquidityParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/liquidity/provide', {
@@ -44,6 +63,10 @@ export class LiquidityModule extends SdkModule {
         return receipts;
     }
 
+    /**
+     * Collects accumulated fees from LP positions.
+     * @returns Promise resolving to the transaction receipt or null if no fees to collect
+     */
     public async collectFees(): Promise<TransactionReceipt | null> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/liquidity/collect-fees', {
@@ -55,6 +78,10 @@ export class LiquidityModule extends SdkModule {
         return this.executeCall(call);
     }
 
+    /**
+     * Removes liquidity from the pool, withdrawing the LP position.
+     * @returns Promise resolving to the transaction receipt or null if no position to remove
+     */
     public async remove(): Promise<TransactionReceipt | null> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/liquidity/remove', {

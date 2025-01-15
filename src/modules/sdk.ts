@@ -1,9 +1,13 @@
 import { Provider, Signer, TransactionReceipt, TransactionRequest } from 'ethers';
 
+/**
+ * @internal
+ */
 export abstract class SdkModule {
     protected provider: Provider;
     protected signer: Signer;
 
+    /** @internal */
     constructor(provider: Provider, signer: Signer) {
         this.provider = provider;
         this.signer = signer;
