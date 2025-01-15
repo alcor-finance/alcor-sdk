@@ -1,6 +1,16 @@
 import 'dotenv/config'
 import { Provider, Signer, TransactionReceipt, TransactionRequest, ethers } from 'ethers';
-import { ComboPosition, LpPosition, Option, Position, ProvideLiquidityParams, TradeComboOptionParams, TradeOptionParams } from './types';
+import {
+    BuyOptionParams,
+    ComboPosition,
+    LpPosition,
+    Option,
+    Position,
+    ProvideLiquidityParams,
+    SellOptionParams,
+    TradeComboOptionParams,
+    TradeOptionParams
+} from './types';
 
 class AlcorSDK {
     private chain: 'arbitrum';
@@ -14,6 +24,7 @@ class AlcorSDK {
         };
         this.provider = new ethers.JsonRpcProvider(rpcProvider[this.chain] + alchemyAPIKey);
         this.signer = new ethers.Wallet(privateKey, this.provider);
+        this.signer.getAddress().then(console.log);
     }
 
     private async fetch(url: string, options: RequestInit, args = '') {
@@ -78,12 +89,12 @@ class AlcorSDK {
         return result.pools;
     }
 
-    public async getOptionPositions(): Promise<Position[]> {
+    public async getOptionPositions(expiration?: number): Promise<Position[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch(
             '/positions',
             { method: 'GET' },
-            `&address=${address}`
+            `&address=${address}` + (expiration ? `&expiration=${expiration}` : '')
         );
 
         return result.positions;
@@ -121,6 +132,28 @@ class AlcorSDK {
         const calls = result.calls as TransactionRequest[];
         const receipts = await this.executeCalls(calls);
         return receipts;
+    }
+
+    public async buyOption(params: BuyOptionParams): Promise<TransactionReceipt[]> {
+        const { option, contractsAmount, paymentToken } = params;
+        return this.tradeOption({
+            ...option,
+            paymentToken: paymentToken ?? 'weth',
+            action: 'buy',
+            contractsAmount,
+            price: option.buyPrice
+        });
+    }
+
+    public async sellOption(params: SellOptionParams): Promise<TransactionReceipt[]> {
+        const { option, contractsAmount, paymentToken } = params;
+        return this.tradeOption({
+            ...option,
+            paymentToken: paymentToken ?? 'weth',
+            action: 'sell',
+            contractsAmount,
+            price: option.sellPrice
+        });
     }
 
     public async tradeComboOption(params: TradeComboOptionParams): Promise<TransactionReceipt[]> {
