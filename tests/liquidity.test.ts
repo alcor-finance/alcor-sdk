@@ -12,23 +12,27 @@ describe('Liquidity', () => {
         sdk = new AlcorSDK(PRIVATE_KEY, RPC_URL);
     });
     
-    test('provide liquidity', async () => {
-        const result = await sdk.liquidity.provideLiquidity({
+    test('provide & collect fees & remove liquidity', async () => {
+        const result = await sdk.liquidity.provide({
             amount: 0.0031
         });
 
         expect(result).toBeDefined();
 
-        const lpPosition = await sdk.liquidity.getPosition();
-        expect(lpPosition).toBeDefined();
-    }, 60000);
-
-    test('collect fees', async () => {
-        const result = await sdk.liquidity.collectFees();
-        expect(result).toBeDefined();
-
-        const position = await sdk.liquidity.getPosition();
+        let position = await sdk.liquidity.getPosition();
         expect(position).toBeDefined();
-        expect(position.feesAmount).toBeLessThan(1e-12);
-    }, 60000);
+
+        const collectFeesResult = await sdk.liquidity.collectFees();
+        expect(collectFeesResult).toBeDefined();
+
+        position = await sdk.liquidity.getPosition();
+        expect(position).toBeDefined();
+        expect(position!.feesAmount).toBeLessThan(1e-12);
+
+        const removeResult = await sdk.liquidity.remove();
+        expect(removeResult).toBeDefined();
+
+        position = await sdk.liquidity.getPosition();
+        expect(position).toBeNull();
+    }, 120000);
 });

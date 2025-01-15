@@ -17,18 +17,22 @@ export class LiquidityModule extends SdkModule {
         return result.pools;
     }
 
-    public async getPosition(): Promise<LpPosition> {
-        const address = await this.signer.getAddress();
-        const result = await this.fetch(
-            '/liquidity/position',
-            { method: 'GET' },
-            `&address=${address}`
-        );
-
-        return result.position;
+    public async getPosition(): Promise<LpPosition | null> {
+        try {
+            const address = await this.signer.getAddress();
+            const result = await this.fetch(
+                '/liquidity/position',
+                { method: 'GET' },
+                `&address=${address
+                }`
+            );
+            return result.position;
+        } catch (error) {
+            return null;
+        }
     }
 
-    public async provideLiquidity(params: ProvideLiquidityParams): Promise<TransactionReceipt[]> {
+    public async provide(params: ProvideLiquidityParams): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/liquidity/provide', {
             method: 'POST',
@@ -43,6 +47,17 @@ export class LiquidityModule extends SdkModule {
     public async collectFees(): Promise<TransactionReceipt | null> {
         const address = await this.signer.getAddress();
         const result = await this.fetch('/liquidity/collect-fees', {
+            method: 'POST',
+            body: JSON.stringify({ address })
+        });
+
+        const call = result.call as TransactionRequest;
+        return this.executeCall(call);
+    }
+
+    public async remove(): Promise<TransactionReceipt | null> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch('/liquidity/remove', {
             method: 'POST',
             body: JSON.stringify({ address })
         });
