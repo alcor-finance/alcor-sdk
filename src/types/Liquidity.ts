@@ -1,18 +1,12 @@
-import { Pool } from "./";
-
 export type ProvideLiquidityParams = {
     amount: number;
 };
 
-export type LpPosition = Pool & {
-    optionsBought: number;
+export type LpPosition = {
+    liquidityAmount: number;
     premiumsPaid: number;
-    deposited: number;
-    unclaimedFees: number;
-    currentStrike: number;
-    currentExpiry: number;
-    minPrice: number;
-    maxPrice: number;
-    tickLower: number;
-    tickUpper: number;
+    optionsBought: number;
+    currentAmount: number;
+    depositAmount: number;
+    feesAmount: number;
 };

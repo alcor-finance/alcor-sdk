@@ -26,6 +26,12 @@ export abstract class SdkModule {
         return result;
     }
 
+    protected async executeCall(call: TransactionRequest): Promise<TransactionReceipt | null> {
+        const tx = await this.signer.sendTransaction(call);
+        const receipt = await tx.wait();
+        return receipt;
+    }
+
     protected async executeCalls(calls: TransactionRequest[]): Promise<TransactionReceipt[]> {
         const address = await this.signer.getAddress();
         const receipts: TransactionReceipt[] = [];

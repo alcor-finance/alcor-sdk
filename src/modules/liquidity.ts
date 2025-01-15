@@ -17,15 +17,15 @@ export class LiquidityModule extends SdkModule {
         return result.pools;
     }
 
-    public async getPositions(): Promise<LpPosition[]> {
+    public async getPosition(): Promise<LpPosition> {
         const address = await this.signer.getAddress();
         const result = await this.fetch(
-            '/liquidity/positions',
+            '/liquidity/position',
             { method: 'GET' },
             `&address=${address}`
         );
 
-        return result.positions;
+        return result.position;
     }
 
     public async provideLiquidity(params: ProvideLiquidityParams): Promise<TransactionReceipt[]> {
@@ -38,5 +38,16 @@ export class LiquidityModule extends SdkModule {
         const receipts = await this.executeCalls(calls);
 
         return receipts;
+    }
+
+    public async collectFees(): Promise<TransactionReceipt | null> {
+        const address = await this.signer.getAddress();
+        const result = await this.fetch('/liquidity/collect-fees', {
+            method: 'POST',
+            body: JSON.stringify({ address })
+        });
+
+        const call = result.call as TransactionRequest;
+        return this.executeCall(call);
     }
 } 

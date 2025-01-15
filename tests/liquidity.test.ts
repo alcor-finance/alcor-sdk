@@ -18,5 +18,17 @@ describe('Liquidity', () => {
         });
 
         expect(result).toBeDefined();
+
+        const lpPosition = await sdk.liquidity.getPosition();
+        expect(lpPosition).toBeDefined();
+    }, 60000);
+
+    test('collect fees', async () => {
+        const result = await sdk.liquidity.collectFees();
+        expect(result).toBeDefined();
+
+        const position = await sdk.liquidity.getPosition();
+        expect(position).toBeDefined();
+        expect(position.feesAmount).toBeLessThan(1e-12);
     }, 60000);
 });
